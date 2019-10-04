@@ -1,8 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import * as PDFJS from 'pdfjs-dist/webpack.js';
-import { PDFPageProxy, PDFPageViewport, PDFRenderTask, PDFDocumentProxy } from 'pdfjs-dist';
 
 import { PdfService } from '@app/services';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab1',
@@ -10,13 +9,24 @@ import { PdfService } from '@app/services';
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page {
-  @ViewChild('canvas', { static: true }) canvasRef: ElementRef;
+  constructor(private pdf: PdfService, private toastController: ToastController) {}
 
-  constructor(private pdf: PdfService) {}
+  async store() {
+    await this.pdf.storeDocument();
+    this.presentToast();
+  }
 
-  async ionViewDidEnter() {
-    this.pdf.storeDocument();
-    const doc = await this.pdf.getDocument();
-    this.pdf.renderPage(doc, this.canvasRef.nativeElement, 1);
+  async clear() {
+    await this.pdf.removeDocument();
+    this.presentToast();
+  }
+
+  private async presentToast() {
+    const toast = await this.toastController.create({
+      message: 'Requested change has been made.',
+      position: 'top',
+      duration: 2000
+    });
+    toast.present();
   }
 }

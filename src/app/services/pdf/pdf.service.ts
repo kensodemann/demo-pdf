@@ -11,6 +11,10 @@ export class PdfService {
 
   constructor(private storage: Storage, private http: HttpClient) {}
 
+  async documentExists(): Promise<boolean> {
+    return !!(await this.storage.get(this.key));
+  }
+
   async storeDocument() {
     const blob = await this.http
       .get('/assets/pdfs/ArchitectureReviewMeetingAgenda.pdf', {
@@ -25,6 +29,10 @@ export class PdfService {
     const pdf = atob(data);
     const doc = await getDocument({ data: pdf }).promise;
     return doc;
+  }
+
+  async removeDocument(): Promise<any> {
+    return await this.storage.remove(this.key);
   }
 
   async renderPage(doc: PDFDocumentProxy, canvas: HTMLCanvasElement, pageNumber: number = 1): Promise<PDFPageProxy> {
@@ -48,7 +56,7 @@ export class PdfService {
     return new Promise(resolve => {
       const reader = new FileReader();
       reader.onload = async evt => {
-        const res = evt.target.result as string;
+        const res = (evt.target as any).result as string;
         const token = 'base64,';
         const idx = res.indexOf(token) > -1 ? res.indexOf(token) + token.length : 0;
         await this.storage.set(this.key, res.substring(idx));
