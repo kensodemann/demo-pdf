@@ -20,5 +20,7 @@ The PdfService does what little "heavy lifting" there is. In reality this is all
 
 It is _highly_ likely you will need to extend the functionallity that is here based on your own needs. In order to do that:
 
-- Read the (PDF.js documentation)[https://mozilla.github.io/pdf.js/]
-- Read the (FileReader documentation) on MDN[]
+- Read the [PDF.js documentation](https://mozilla.github.io/pdf.js/)
+- Read the [FileReader documentation](https://developer.mozilla.org/en-US/docs/Web/API/FileReader) on MDN
+
+**Note:** this sample just reads a local file. If you are downloading PDF files from online you may need to make sure that you have CORS properly implemented on whatever server you are getting the PDF from.
