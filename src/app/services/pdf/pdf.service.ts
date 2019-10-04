@@ -1,14 +1,29 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Storage } from '@ionic/storage';
 import { getDocument, PDFDocumentProxy, PDFPageViewport, PDFPageProxy } from 'pdfjs-dist/webpack';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PdfService {
-  constructor() {}
+  private key = 'my-pdf-doc';
 
-  async loadFile(): Promise<PDFDocumentProxy> {
-    const doc = await getDocument('/assets/pdfs/ArchitectureReviewMeetingAgenda.pdf').promise;
+  constructor(private storage: Storage, private http: HttpClient) {}
+
+  async storeDocument() {
+    const blob = await this.http
+      .get('/assets/pdfs/ArchitectureReviewMeetingAgenda.pdf', {
+        responseType: 'blob'
+      })
+      .toPromise();
+    return this.storeDocumentAsBase64(blob);
+  }
+
+  async getDocument(): Promise<PDFDocumentProxy> {
+    const data = await this.storage.get(this.key);
+    const pdf = atob(data);
+    const doc = await getDocument({ data: pdf }).promise;
     return doc;
   }
 
@@ -27,5 +42,19 @@ export class PdfService {
       canvasContext,
       viewport
     }).promise;
+  }
+
+  private storeDocumentAsBase64(blob: Blob): Promise<void> {
+    return new Promise(resolve => {
+      const reader = new FileReader();
+      reader.onload = async evt => {
+        const res = evt.target.result as string;
+        const token = 'base64,';
+        const idx = res.indexOf(token) > -1 ? res.indexOf(token) + token.length : 0;
+        await this.storage.set(this.key, res.substring(idx));
+        resolve();
+      };
+      reader.readAsDataURL(blob);
+    });
   }
 }

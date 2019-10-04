@@ -15,7 +15,8 @@ export class Tab1Page {
   constructor(private pdf: PdfService) {}
 
   async ionViewDidEnter() {
-    const doc = await this.pdf.loadFile();
+    this.pdf.storeDocument();
+    const doc = await this.pdf.getDocument();
     this.pdf.renderPage(doc, this.canvasRef.nativeElement, 1);
   }
 }
