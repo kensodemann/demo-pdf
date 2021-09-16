@@ -1,0 +1,7 @@
+{
+  "name": "demo-pdf",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
