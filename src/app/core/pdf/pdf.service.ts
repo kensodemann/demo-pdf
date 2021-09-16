@@ -4,7 +4,7 @@ import { Storage } from '@ionic/storage';
 import { getDocument, PDFDocumentProxy, PDFPageViewport, PDFPageProxy } from 'pdfjs-dist/webpack';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PdfService {
   private key = 'my-pdf-doc';
@@ -18,7 +18,7 @@ export class PdfService {
   async storeDocument() {
     const blob = await this.http
       .get('/assets/pdfs/ArchitectureReviewMeetingAgenda.pdf', {
-        responseType: 'blob'
+        responseType: 'blob',
       })
       .toPromise();
     return this.storeDocumentAsBase64(blob);
@@ -36,26 +36,23 @@ export class PdfService {
   }
 
   async renderPage(doc: PDFDocumentProxy, canvas: HTMLCanvasElement, pageNumber: number = 1): Promise<PDFPageProxy> {
-    let canvasContext: CanvasRenderingContext2D;
     const pdfPage = await doc.getPage(pageNumber);
-
     const viewport = pdfPage.getViewport({ scale: 1 }) as PDFPageViewport;
-
-    canvasContext = canvas.getContext('2d') as CanvasRenderingContext2D;
+    const canvasContext = canvas.getContext('2d') as CanvasRenderingContext2D;
 
     canvas.width = viewport.width;
     canvas.height = viewport.height;
 
     return pdfPage.render({
       canvasContext,
-      viewport
+      viewport,
     }).promise;
   }
 
   private storeDocumentAsBase64(blob: Blob): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const reader = new FileReader();
-      reader.onload = async evt => {
+      reader.onload = async (evt) => {
         const res = (evt.target as any).result as string;
         const token = 'base64,';
         const idx = res.indexOf(token) > -1 ? res.indexOf(token) + token.length : 0;

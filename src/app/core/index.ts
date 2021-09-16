@@ -1,1 +1,1 @@
-export * from './pdf/pdf.service'
+export * from './pdf/pdf.service';
