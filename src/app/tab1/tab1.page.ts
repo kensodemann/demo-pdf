@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { ToastController } from '@ionic/angular';
 import { PdfService } from '../core';
 
@@ -8,7 +9,7 @@ import { PdfService } from '../core';
   styleUrls: ['tab1.page.scss'],
 })
 export class Tab1Page {
-  constructor(private pdf: PdfService, private toastController: ToastController) {}
+  constructor(private browser: InAppBrowser, private pdf: PdfService, private toastController: ToastController) {}
 
   async store() {
     await this.pdf.storeDocument();
@@ -18,6 +19,10 @@ export class Tab1Page {
   async clear() {
     await this.pdf.removeDocument();
     this.presentToast();
+  }
+
+  display(target: string) {
+    this.browser.create('https://www.google.com', target);
   }
 
   private async presentToast() {

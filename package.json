@@ -5,7 +5,7 @@
   "description": "An Ionic project",
   "homepage": "https://ionicframework.com/",
   "scripts": {
-    "build": "ng build",
+    "build": "ng build && cap sync",
     "e2e": "ng e2e",
     "lint": "ng lint",
     "ng": "ng",
@@ -27,6 +27,7 @@
     "@capacitor/haptics": "1.0.3",
     "@capacitor/ios": "3.2.3",
     "@capacitor/keyboard": "1.0.3",
+    "@ionic-enterprise/inappbrowser": "~5.0.1",
     "@ionic/angular": "^5.5.2",
     "@ionic/storage-angular": "~3.0.6",
     "pdfjs-dist": "~2.9.359",
